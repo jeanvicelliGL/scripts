@@ -1,0 +1,80 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: This script creates S3 Bucket for Oculus - DEV
+Parameters:
+  ProjectName:
+    Type: String
+    Default: Oculus
+    Description: The name of the project.
+  ProjectPOC:
+    Type: String
+    Default: Jay Miller
+    Description: The point of contact for the project.
+  ProjectWBSCode:
+    Type: String
+    Default: IIP.UNUMP2.15.CAP
+    Description: The work breakdown structure code for the project.
+  ProjectPONumber:
+    Type: String
+    Default: TBD
+    Description: The purchase order number for the project.
+  ExpirationDate:
+    Type: String
+    Default: '20181231'
+    Description: The expiration date for the project.
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: oculus-dev
+      Tags:
+      - Key: Name
+        Value: OCULUS-DEV-BUCKET
+      - Key: ProjectName
+        Value:
+          Ref: ProjectName
+      - Key: ProjectPOC
+        Value:
+          Ref: ProjectPOC
+      - Key: ProjectWBSCode
+        Value:
+          Ref: ProjectWBSCode
+      - Key: ProjectPONumber
+        Value:
+          Ref: ProjectPONumber
+      - Key: ExpirationDate
+        Value:
+          Ref: ExpirationDate
+  S3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: S3Bucket
+      PolicyDocument:
+        Statement:
+        - Sid: Access-from-specific-VPCEndpoint-only
+          Effect: Deny
+          Principal:
+            AWS: "*"
+          Action: s3:*
+          Resource:
+            Fn::Join:
+            - ''
+            - - 'arn:aws:s3:::'
+              - Ref: S3Bucket
+              - "/*"
+          Condition:
+            StringNotEquals:
+              aws:sourceVpce: vpce-ca8466a3
+    DependsOn:
+    - S3Bucket
+Outputs:
+  S3BucketURL:
+    Value:
+      Fn::Join:
+      - ''
+      - - http://
+        - Fn::GetAtt:
+          - S3Bucket
+          - DomainName
