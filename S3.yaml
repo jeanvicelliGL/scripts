@@ -2,9 +2,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: This script creates S3 Bucket for Oculus - DEV
 Parameters:
+#Project params
   ProjectName:
     Type: String
-    Default: Oculus
+    Default: 3rd Party Ingest Workflow
     Description: The name of the project.
   ProjectPOC:
     Type: String
@@ -12,16 +13,12 @@ Parameters:
     Description: The point of contact for the project.
   ProjectWBSCode:
     Type: String
-    Default: IIP.UNUMP2.15.CAP
+    Default: CAPTURE.MVP1.17.CAP
     Description: The work breakdown structure code for the project.
   ProjectPONumber:
     Type: String
     Default: TBD
     Description: The purchase order number for the project.
-  ExpirationDate:
-    Type: String
-    Default: '20181231'
-    Description: The expiration date for the project.
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket

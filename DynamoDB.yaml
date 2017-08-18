@@ -30,8 +30,25 @@ Parameters:
     MinValue: '5'
     MaxValue: '10000'
     ConstraintDescription: must be between 5 and 10000
+#Project params
+  ProjectName:
+    Type: String
+    Default: 3rd Party Ingest Workflow
+    Description: The name of the project.
+  ProjectPOC:
+    Type: String
+    Default: Jay Miller
+    Description: The point of contact for the project.
+  ProjectWBSCode:
+    Type: String
+    Default: CAPTURE.MVP1.17.CAP
+    Description: The work breakdown structure code for the project.
+  ProjectPONumber:
+    Type: String
+    Default: TBD
+    Description: The purchase order number for the project.
 Resources:
-  OculusDynamoDBTable:
+  DevIngestCeleryTable:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
@@ -43,7 +60,18 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: !Ref 'ReadCapacityUnits'
         WriteCapacityUnits: !Ref 'WriteCapacityUnits'
+      Tags:
+      - Key: Name
+        Value: DevIngestCeleryTable
+      - Key: ProjectName
+        Value: !Ref ProjectName
+      - Key: ProjectPOC
+        Value: !Ref ProjectPOC
+      - Key: ProjectWBSCode
+        Value: !Ref ProjectWBSCode
+      - Key: ProjectPONumber
+        Value: !Ref ProjectPONumber
 Outputs:
   TableName:
-    Value: !Ref 'OculusDynamoDBTable'
+    Value: !Ref 'DevIngestCeleryTable'
     Description: Table name of the newly created DynamoDB table

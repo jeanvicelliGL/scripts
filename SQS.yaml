@@ -1,43 +1,14 @@
 ---
 AWSTemplateFormatVersion: '2010-09-09'
-# DG project info
-Parameters:
-  ProjectName:
-    Type: String
-    Default: Oculus
-    Description: The name of the project.
-  ProjectPOC:
-    Type: String
-    Default: Jay Miller
-    Description: The point of contact for the project.
-  ProjectWBSCode:
-    Type: String
-    Default: IIP.UNUMP2.15.CAP
-    Description: The work breakdown structure code for the project.
-  ProjectPONumber:
-    Type: String
-    Default: TBD
-    Description: The purchase order number for the project.
 
 # For Oculus queue
+# SQS doesnt support tags yet
+# https://sqs.us-east-2.amazonaws.com/465688003075/OculusSQS
 Resources:
   OculusQueue:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: OculusQueueDev
-      Tags:
-      - Key: Name
-        Value: OCULUS-DEV-SQS
-      - Key: ProjectName
-        Value: !Ref ProjectName
-      - Key: ProjectPOC
-        Value: !Ref ProjectPOC
-      - Key: ProjectWBSCode
-        Value: !Ref ProjectWBSCode
-      - Key: ProjectPONumber
-        Value: !Ref ProjectPONumber
-      - Key: ExpirationDate
-        Value: !Ref ExpirationDate
 Outputs:
   QueueName:
     Description: The name of the queue
